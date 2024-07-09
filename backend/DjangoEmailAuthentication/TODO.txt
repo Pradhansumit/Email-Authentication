@@ -1,0 +1,30 @@
+Email Authentication
+
+[] Register
+    [] Make Model
+    [] Save Data in the Model
+    [] Set User In-active till user clicks the verification code and the verification code is verified.
+    [] Set user active if the verification code is correctly verified.
+
+[] Send Email
+    [] Create Token
+    [] Set Token Validity period.
+    [] Call the token and attach token in email.
+    [] Get email from the user request/form.
+    [] Send the token attached mail to the user via provided email.
+   
+[] User Clicks the Verification Code
+    [] redirect to verification code function.
+
+[] check whether the verification code is correct
+    
+[] User gets redirected to Dashboard
+    [] if token is not valid give invalid exception
+
+[] User logs out
+
+[] User is redirected to login page
+
+[] User enters credentials
+
+[] User is logged in.
