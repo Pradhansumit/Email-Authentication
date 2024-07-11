@@ -2,24 +2,16 @@ from django.contrib.auth import authenticate
 from rest_framework import serializers, exceptions
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
-from api.models import User
+from api.models import CustomUser
 
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
-        model = User
-        fields = '__all__'
-        extra_kwargs = {'password': {'write_only': True, 'min_length': 5, 'style': {'input_type': 'password'}}}
-
-    def create(self, validated_data):
-        user = User.objects.create_user(**validated_data)
-        return user
-
-    def to_representation(self, instance):
-        """Overriding to remove password when returning data"""
-        ret = super().to_representation(instance)
-        ret.pop('password', None)
-        return ret
+        model = CustomUser
+        fields = ('first_name', 'last_name', 'address',
+                  'phone_number', 'password', 'email')
+        extra_kwargs = {'password': {'write_only': True,
+                                     'min_length': 5, 'style': {'input_type': 'password'}}}
 
 
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
@@ -35,7 +27,8 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
 
         if user:
             if not user.is_active:
-                raise exceptions.AuthenticationFailed('User inactive or deleted.')
+                raise exceptions.AuthenticationFailed(
+                    'User inactive or deleted.')
             data = {}
             refresh = self.get_token(user)
             data['refresh'] = str(refresh)

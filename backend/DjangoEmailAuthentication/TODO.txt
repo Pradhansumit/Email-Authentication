@@ -1,8 +1,8 @@
 Email Authentication
 
 [] Register
-    [] Make Model
-    [] Save Data in the Model
+    [x] Make Model
+    [x] Save Data in the Model
     [] Set User In-active till user clicks the verification code and the verification code is verified.
     [] Set user active if the verification code is correctly verified.
 

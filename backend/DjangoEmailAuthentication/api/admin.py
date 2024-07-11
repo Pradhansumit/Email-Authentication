@@ -1,5 +1,9 @@
 from django.contrib import admin
 
-from .models import User
+from .models import CustomUser
 
-admin.site.register(User)
+
+@admin.register(CustomUser)
+class UserAdmin(admin.ModelAdmin):
+    class Meta:
+        fields = "__all__"
