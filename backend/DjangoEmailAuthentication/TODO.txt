@@ -4,6 +4,9 @@ Email Authentication
     [x] Make Model
     [x] Save Data in the Model
     [] Set User In-active till user clicks the verification code and the verification code is verified.
+        [x] set user inactive
+        [] verification code generation
+        [] calling verification code method in view
     [] Set user active if the verification code is correctly verified.
 
 [] Send Email

@@ -12,6 +12,7 @@ class CustomUser(AbstractBaseUser):
     phone_number = models.CharField(max_length=50)
     password = models.CharField(max_length=255)
 
+    is_active = models.BooleanField(default=False)
     is_admin = models.BooleanField(default=False)
 
     email = models.EmailField(unique=True)
@@ -24,8 +25,8 @@ class CustomUser(AbstractBaseUser):
     def __str__(self):
         return self.first_name + " " + self.last_name + " " + self.email
 
-    def is_active(self):
-        return True
+    # def is_active(self):
+    #     return True
 
     def has_perm(self, perm, obj=None):
         return True
