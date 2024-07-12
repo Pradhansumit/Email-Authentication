@@ -7,16 +7,18 @@ from datetime import timedelta, datetime, timezone
 
 main.load_dotenv()
 
-secret = os.getenv('secret')
-algorithm = os.getenv('algorithm')
 
-payload = {
-    'user_id': 'abc',
-    'exp': datetime.now(timezone.utc) + timedelta(seconds=20)
-}
+def CreateToken(user: dict):
+    secret = os.getenv('secret')
+    algorithm = os.getenv('algorithm')
+    user_dtl = user
+    payload = {
+        'first_name': user_dtl["first_name"],
+        'last_name': user_dtl["last_name"],
+        'phone': user_dtl["phone"],
+        'email': user_dtl["email"],
+        'exp': datetime.now(timezone.utc) + timedelta(seconds=20)
+    }
 
-token = jwt.encode(payload, secret, algorithm)
-
-time.sleep(21)
-
-print(jwt.decode(token, secret, algorithm))
+    token = jwt.encode(payload, secret, algorithm)
+    return token
