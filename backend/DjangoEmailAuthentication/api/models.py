@@ -37,3 +37,9 @@ class CustomUser(AbstractBaseUser):
     @property
     def is_staff(self):
         return self.is_admin
+
+
+# TOKEN MODEL
+class TokenModel(models.Model):
+    user = models.ForeignKey
+    token = models.CharField(max_length=200)
