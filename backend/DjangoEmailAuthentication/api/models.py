@@ -1,3 +1,4 @@
+from operator import truediv
 from django.contrib.auth.base_user import AbstractBaseUser
 from django.db import models
 
@@ -41,5 +42,5 @@ class CustomUser(AbstractBaseUser):
 
 # TOKEN MODEL
 class TokenModel(models.Model):
-    user = models.ForeignKey
+    user = models.EmailField(unique=True)
     token = models.CharField(max_length=200)

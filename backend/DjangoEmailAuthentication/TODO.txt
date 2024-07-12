@@ -5,9 +5,13 @@ Email Authentication
     [x] Save Data in the Model
     [] Set User In-active till user clicks the verification code and the verification code is verified.
         [x] set user inactive
-        [] verification code generation
-        [] calling verification code method in view
+        [x] verification code generation
+        [x] calling verification code method in view -> [x] created a new function named VerifyEmailTokenCode
+        [x] save verification code in the database
     [] Set user active if the verification code is correctly verified.
+        [] make a function for verifying email token code
+        [] check if the code is correct
+        [] login the user
 
 [] Send Email
     [] Create Token

@@ -1,10 +1,11 @@
 from django.urls import path
-
-from . import views
+from api import views
 
 urlpatterns = [
-    # path('Register', views.UserProfileListCreateView.as_view(), name="hello-world"),
-    # path('token', views.CustomTokenObtainPairView.as_view(), name="token"),
-    # path('sendMail', views.sendMail)
-    path("Register", views.Register, name="Register")
+    path("auth/register", views.Register, name="Register"),
+    path(
+        "auth/verification-code/<str:token>",
+        views.VerifyEmailTokenCode,
+        name="VerifyEmailTokenCode",
+    ),
 ]

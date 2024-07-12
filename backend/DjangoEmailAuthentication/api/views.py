@@ -4,9 +4,10 @@ from rest_framework.response import Response
 from rest_framework import status
 from django.contrib.auth import get_user_model
 from .CustomToken import CreateToken
+from .VerficationMail import send_Verification_email
 
 
-@api_view(['POST'])
+@api_view(["POST"])
 def Register(request):
     if request.method == "POST":
         user_email = request.data.get("email")
@@ -22,7 +23,17 @@ def Register(request):
         serializer = UserSerializer(data=request.data)
         if serializer.is_valid():
             token = CreateToken(user)
-            print(token)
+            send_Verification_email(
+                token=token, email=user_email, first_name=user_fname
+            )
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(["GET"])
+def VerifyEmailTokenCode(request, *args, **kwargs):
+    if kwargs.get("token", None) is not None:
+        print(kwargs["token"])
+        return Response()
+    # token = request.data.get("token")
