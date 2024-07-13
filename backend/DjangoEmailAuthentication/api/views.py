@@ -1,10 +1,12 @@
-from .serializer import UserSerializer
+from ast import Return
+from urllib import response
+from django.http import HttpResponseRedirect
+from api.serializer import UserSerializer
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
-from django.contrib.auth import get_user_model
-from .CustomToken import CreateToken
-from .VerficationMail import send_Verification_email
+from api.CustomToken import CreateToken, GetToken
+from api.VerficationMail import send_Verification_email
 
 
 @api_view(["POST"])
@@ -33,7 +35,10 @@ def Register(request):
 
 @api_view(["GET"])
 def VerifyEmailTokenCode(request, *args, **kwargs):
-    if kwargs.get("token", None) is not None:
-        print(kwargs["token"])
-        return Response()
-    # token = request.data.get("token")
+    try:
+        if kwargs.get("token", None) is not None:
+            tk_result = GetToken(token=kwargs.get("token"))
+            if tk_result == True:
+                return Response()
+    except Exception as ex:
+        return Response({"error": str(ex)}, status=500)
