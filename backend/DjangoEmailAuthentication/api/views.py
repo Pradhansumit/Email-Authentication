@@ -48,9 +48,8 @@ def VerifyEmailTokenCode(request, *args, **kwargs):
 @api_view(["POST"])
 def Logout(request, *args, **kwargs):
     try:
-        if request.user.is_authenticated():
-            logout(request)
-            return Response({}, status=status.HTTP_200_OK)
+        logout(request)
+        return Response({}, status=status.HTTP_200_OK)
 
     except Exception as ex:
         return Response(
@@ -66,15 +65,11 @@ def Login(request, *args, **kwargs):
             user_name = request.data.get("username")
             user_pass = request.data.get("password")
 
-            # print(f"\n\n username= {user_name} \t password = {user_pass} \n\n")
-
             user = authenticate(request, username=user_name, password=user_pass)
-            print(f"\n\n \t\t {user} \n\n")
 
             if user is not None:
-                login_result = login(request, user)
+                login(request, user)
 
-                # print(f"\n\n \t\t {login_result} \n\n")
                 # user_details = CustomUser.objects.get(email=user_name)
 
                 return Response(
