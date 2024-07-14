@@ -26,15 +26,27 @@ Email Authentication
     [x] make a function for verifying email token code
     [x] check if the code is correct
     [x] exception handling in token
-    [] login the user
+    [x] login the user
 
-[] User gets redirected to Dashboard
-    [] if token is not valid give invalid exception
+[x] User gets redirected to Dashboard
+    [x] if token is not valid give invalid exception
 
-[] User logs out
+[] Create functions
+    [x] Login API function
+         Note: During login the user was not able to get authenticated result in 401 UnAuthorized. 
+                What was the reason for not getting authenticated? But the super_user was able to get authenticated. Why so? 
+                In admin panel when compared it was found out that the user has password that has raw password that has not been hashed, while super_user's password was hashed. So when authenticate() function was called then it was throwing "None" result. Resulting in failing of authentication.
+                On researching I found out that when using custom user for authentication, provide set_password in backend for making has password. But I already mentioned it there.
+                Later I found out that when you're registering user via API calls then in ModelSerializer one have to override the create() function. In this create method, create the hash password. And save it.
+
+                I did but failed to get result. Minor mistake was that I wrote create() method inside Meta class which should be outside the Meta Class.
+    [x] Logout API function
+
+[x] User logs out
 
 [] User is redirected to login page
 
 [] User enters credentials
 
 [] User is logged in.
+    

@@ -1,12 +1,10 @@
-from ast import Return
-from urllib import response
-from django.http import HttpResponseRedirect
 from api.serializer import UserSerializer
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
 from api.CustomToken import CreateToken, GetToken
 from api.VerficationMail import send_Verification_email
+from django.contrib.auth import authenticate, login, logout
 
 
 @api_view(["POST"])
@@ -39,6 +37,55 @@ def VerifyEmailTokenCode(request, *args, **kwargs):
         if kwargs.get("token", None) is not None:
             tk_result = GetToken(token=kwargs.get("token"))
             if tk_result == True:
-                return Response()
+                return Response(
+                    data={"successful": "Token Accepted"},
+                    status=status.HTTP_202_ACCEPTED,
+                )
     except Exception as ex:
         return Response({"error": str(ex)}, status=500)
+
+
+@api_view(["POST"])
+def Logout(request, *args, **kwargs):
+    try:
+        if request.user.is_authenticated():
+            logout(request)
+            return Response({}, status=status.HTTP_200_OK)
+
+    except Exception as ex:
+        return Response(
+            {"error": str(ex)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR
+        )
+
+
+@api_view(["POST"])
+def Login(request, *args, **kwargs):
+    try:
+        # isValid: bool = False
+        if request.method == "POST":
+            user_name = request.data.get("username")
+            user_pass = request.data.get("password")
+
+            # print(f"\n\n username= {user_name} \t password = {user_pass} \n\n")
+
+            user = authenticate(request, username=user_name, password=user_pass)
+            print(f"\n\n \t\t {user} \n\n")
+
+            if user is not None:
+                login_result = login(request, user)
+
+                # print(f"\n\n \t\t {login_result} \n\n")
+                # user_details = CustomUser.objects.get(email=user_name)
+
+                return Response(
+                    data={"message": "Login successful"}, status=status.HTTP_200_OK
+                )
+            else:
+                return Response(
+                    data={"message": "Invalid username or password"},
+                    status=status.HTTP_401_UNAUTHORIZED,
+                )
+    except Exception as ex:
+        return Response(
+            {"error": str(ex)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR
+        )

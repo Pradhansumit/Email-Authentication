@@ -21,7 +21,7 @@ def CreateToken(user: dict) -> str:
         "last_name": user_dtl["last_name"],
         "phone": user_dtl["phone"],
         "email": user_dtl["email"],
-        "exp": datetime.now(timezone.utc) + timedelta(seconds=5),
+        "exp": datetime.now(timezone.utc) + timedelta(days=1),
     }
 
     token = jwt.encode(payload, secret, algorithm)

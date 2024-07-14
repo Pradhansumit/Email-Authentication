@@ -8,4 +8,6 @@ urlpatterns = [
         views.VerifyEmailTokenCode,
         name="VerifyEmailTokenCode",
     ),
+    path("auth/login", views.Login, name="Login"),
+    path("auth/logout", views.Logout, name="Logout"),
 ]
