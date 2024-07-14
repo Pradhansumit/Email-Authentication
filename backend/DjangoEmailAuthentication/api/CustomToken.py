@@ -1,5 +1,6 @@
 import email
 from sys import exception
+from warnings import catch_warnings
 import jwt
 import os
 from dotenv import main
@@ -46,17 +47,21 @@ def GetToken(token):
 
             tk_user = token_rec["email"]
             tk_user_verified = models.CustomUser.objects.get(email=tk_user)
-
-            print(tk_model_result, tk_user_verified)
-            """
-            for changing status of user
-            user is active when the token is valid 
-            both in time and model
-            """
-            if tk_model_result and tk_user_verified:
-                tk_user_verified.is_active = True
-                tk_user_verified.save()
-                return True
+            if tk_model_result.isVerified is not True:
+                if tk_model_result and tk_user_verified:
+                    """
+                    for changing status of user
+                    user is active when the token is valid 
+                    both in time and model
+                    """
+                    tk_model_result.isVerified = True
+                    tk_model_result.save() # to set token one time usage
+                    tk_user_verified.is_active = True
+                    tk_user_verified.save()
+                    return True
+                return False
+            else:
+                return False
 
     except jwt.ExpiredSignatureError as ex:
         raise Exception({"Token Expired!", status.HTTP_401_UNAUTHORIZED})

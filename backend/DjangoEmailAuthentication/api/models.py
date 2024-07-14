@@ -42,3 +42,4 @@ class CustomUser(AbstractBaseUser):
 class TokenModel(models.Model):
     user = models.EmailField(unique=True)
     token = models.CharField(max_length=200)
+    isVerified = models.BooleanField(default=False)

@@ -41,6 +41,10 @@ def VerifyEmailTokenCode(request, *args, **kwargs):
                     data={"successful": "Token Accepted"},
                     status=status.HTTP_202_ACCEPTED,
                 )
+            else:
+                return Response(
+                    data={"error": "Token Invalid"}, status=status.HTTP_400_BAD_REQUEST
+                )
     except Exception as ex:
         return Response({"error": str(ex)}, status=500)
 

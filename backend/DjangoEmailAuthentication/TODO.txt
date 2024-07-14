@@ -44,6 +44,8 @@ Email Authentication
 
 [x] User logs out
 
+[] One time verification for token
+
 [] User is redirected to login page
 
 [] User enters credentials
