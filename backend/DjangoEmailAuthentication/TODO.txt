@@ -44,11 +44,11 @@ Email Authentication
 
 [x] User logs out
 
-[] One time verification for token
+[x] One time verification for token
 
-[] User is redirected to login page
+[x] User is redirected to login page
 
-[] User enters credentials
+[x] User enters credentials
 
-[] User is logged in.
+[x] User is logged in.
     
