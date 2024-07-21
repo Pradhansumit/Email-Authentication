@@ -1,0 +1,79 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+}
+
+body {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+  background: linear-gradient(135deg, #71b7e6, #9b59b6);
+}
+
+.RegistrationForm {
+  background: #fff;
+  padding: 20px;
+  border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+}
+
+
+.input-box {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.input-box>input {
+  padding: 2px 5px;
+}
+
+.input-box>input:focus {
+  outline: none;
+}
+
+.button {
+  margin-top: 10px;
+  padding: 7px 0;
+  width: 100%;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  transition: all 0.3s ease;
+  background: linear-gradient(135deg, #71b7e6, #9b59b6);
+  cursor: pointer;
+  letter-spacing: 1px;
+  border-radius: 5px;
+  border: none;
+  color: #fff;
+  font-size: 18px;
+  font-weight: 500;
+}
+
+.LoginForm {
+  background: #fff;
+  padding: 20px;
+  border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+}
+
+.NotFoundContainer{
+  margin:auto auto;
+  text-align: center;
+}
+.NotFoundContainer .heading{
+  font-size: 200px;
+  color: #e4e4ff;
+}
+.NotFoundContainer .desc{
+  font-size:30px;
+  font-weight: bold;
+  color:#e4e4ff;
+}

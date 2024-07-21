@@ -2,7 +2,6 @@ import os
 import dotenv
 from pathlib import Path
 
-
 # load env file
 dotenv.load_dotenv()
 
@@ -18,7 +17,7 @@ SECRET_KEY = str(os.getenv("SECRET_KEY"))
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 # Application definition
 DEFAULT_APPS = [
@@ -41,6 +40,7 @@ CUSTOM_APPS = [
 INSTALLED_APPS = DEFAULT_APPS + THIRD_PARTY_APPS + CUSTOM_APPS
 
 MIDDLEWARE = [
+    "corsheaders.middleware.CorsMiddleware",  # for cors
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -136,7 +136,6 @@ REST_FRAMEWORK = {
     "EXCEPTION_HANDLER": "rest_framework.views.exception_handler",
 }
 
-
 # EMAIL SETTINGS FOR EMAIL VERIFICATION
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = str(os.getenv("EMAIL_HOST"))
@@ -144,3 +143,8 @@ EMAIL_PORT = str(os.getenv("EMAIL_PORT"))
 EMAIL_USE_SSL = True
 EMAIL_HOST_USER = str(os.getenv("EMAIL_HOST_USER"))
 EMAIL_HOST_PASSWORD = str(os.getenv("EMAIL_HOST_PASSWORD"))
+
+# CORS SETTINGS
+
+CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_CREDENTIALS = True

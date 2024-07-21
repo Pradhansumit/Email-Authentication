@@ -10,4 +10,5 @@ urlpatterns = [
     ),
     path("auth/login", views.Login, name="Login"),
     path("auth/logout", views.Logout, name="Logout"),
+    path("auth/refresh", views.RefreshToken, name="Refresh"),
 ]

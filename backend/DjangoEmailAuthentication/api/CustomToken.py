@@ -1,12 +1,13 @@
-import email
 from sys import exception
 from warnings import catch_warnings
+from xmlrpc.client import ResponseError
 import jwt
 import os
 from dotenv import main
 from datetime import timedelta, datetime, timezone
 from api import models
 from rest_framework import status
+from rest_framework_simplejwt.tokens import RefreshToken
 
 main.load_dotenv()
 secret = os.getenv("secret")
@@ -15,7 +16,7 @@ algorithm = os.getenv("algorithm")
 # FOR CREATING TOKEN
 
 
-def CreateToken(user: dict) -> str:
+def CreateEmailToken(user: dict) -> str:
     user_dtl = user
     payload = {
         "first_name": user_dtl["first_name"],
@@ -73,6 +74,52 @@ def GetToken(token):
     ) as ex:
         raise Exception({"Invalid token or user not found.", status.HTTP_403_FORBIDDEN})
 
+    except Exception as ex:
+        raise Exception(
+            {f"Error decoding token: {str(ex)}", status.HTTP_406_NOT_ACCEPTABLE}
+        )
+        
+# SETTING TOKEN AFTER LOGIN IN COOKIE
+def SetTokenAfterLogin(user:dict[str, str]):
+    try:
+        user_dtl = user
+        payload = {
+        "first_name": user_dtl["first_name"],
+        "last_name": user_dtl["last_name"],
+        "email": user_dtl["email"],
+        "exp": datetime.now(timezone.utc) + timedelta(days=1),
+        }
+        refresh_token = jwt.encode(payload, secret, algorithm)
+        access_token = jwt.encode(
+            {
+                "full_name":user_dtl["first_name"]+user_dtl["last_name"],
+                "email":user_dtl["email"],
+                "exp": datetime.now(timezone.utc) + timedelta(minutes=5),
+            }, 
+            secret,
+            algorithm
+        )
+        return {"refresh-token":refresh_token, "access-token":access_token}
+        
+    except Exception as ex:
+        raise Exception ({f"Error decoding token: {str(ex)}", status.HTTP_403_FORBIDDEN})
+
+# For New Access and Refresh token
+def GetNewAccessToken(refresh_token):
+    try:
+        token_dec = jwt.decode(refresh_token, secret, algorithm)
+        if(token_dec):
+            tk_user = token_dec["email"]
+            print(f"tk_user, {tk_user}")
+            tk_user_verified = models.CustomUser.objects.get(email=tk_user)
+            if tk_user_verified:
+                tk_user_details:dict[str, str] = {
+                    "first_name":tk_user_verified.first_name, 
+                    "last_name":tk_user_verified.last_name,
+                    "email":tk_user_verified.email
+                }
+                new_token =  SetTokenAfterLogin(tk_user_details)
+                return new_token
     except Exception as ex:
         raise Exception(
             {f"Error decoding token: {str(ex)}", status.HTTP_406_NOT_ACCEPTABLE}

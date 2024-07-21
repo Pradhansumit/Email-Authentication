@@ -51,4 +51,11 @@ Email Authentication
 [x] User enters credentials
 
 [x] User is logged in.
+
+[x] Setting Cookie in browser
     
+[] Create api for calling refresh token when and get new access token. 
+
+[] if refresh token is expired or isn't valid then logout user and redirect to login page.
+
+[] set permission for apis

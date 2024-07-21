@@ -2,7 +2,12 @@ from api.serializer import UserSerializer
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
-from api.CustomToken import CreateToken, GetToken
+from api.CustomToken import (
+    CreateEmailToken,
+    GetNewAccessToken,
+    GetToken,
+    SetTokenAfterLogin,
+)
 from api.VerficationMail import send_Verification_email
 from django.contrib.auth import authenticate, login, logout
 
@@ -22,7 +27,7 @@ def Register(request):
         }
         serializer = UserSerializer(data=request.data)
         if serializer.is_valid():
-            token = CreateToken(user)
+            token = CreateEmailToken(user)
             send_Verification_email(
                 token=token, email=user_email, first_name=user_fname
             )
@@ -74,11 +79,37 @@ def Login(request, *args, **kwargs):
             if user is not None:
                 login(request, user)
 
-                # user_details = CustomUser.objects.get(email=user_name)
+                user_details: dict[str, str] = {
+                    "first_name": user.first_name,
+                    "last_name": user.last_name,
+                    "email": user.email,
+                }
 
-                return Response(
-                    data={"message": "Login successful"}, status=status.HTTP_200_OK
+                # user_details = CustomUser.objects.get(email=user_name)
+                tokens: dict[str, str] = SetTokenAfterLogin(user=user_details)
+
+                response = Response(
+                    {
+                        "message": "Login Successful",
+                        "access-token": f"{tokens['access-token']}",
+                        "refresh-token": f"{tokens['refresh-token']}",
+                    },
+                    status=status.HTTP_200_OK,
                 )
+                response.set_cookie(
+                    key="refresh_token",
+                    value=tokens["refresh-token"],
+                    secure=False,
+                    max_age=604800,  # 7 days
+                )
+                response.set_cookie(
+                    key="access_token",
+                    value=tokens["access-token"],
+                    secure=False,
+                    max_age=300,
+                )
+
+                return response
             else:
                 return Response(
                     data={"message": "Invalid username or password"},
@@ -88,3 +119,32 @@ def Login(request, *args, **kwargs):
         return Response(
             {"error": str(ex)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR
         )
+
+
+@api_view(["POST"])
+def RefreshToken(request, *args, **kwargs):
+    if request.method == "POST":
+        refresh_token = request.data.get("refresh")
+        print("refreshToken:", refresh_token)
+        tokens = GetNewAccessToken(refresh_token=refresh_token)
+        response = Response(
+            {
+                "message": "Login Successful",
+                "access-token": f"{tokens['access-token']}",
+                "refresh-token": f"{tokens['refresh-token']}",
+            },
+            status=status.HTTP_200_OK,
+        )
+        response.set_cookie(
+            key="refresh_token",
+            value=tokens["refresh-token"],
+            secure=False,
+            max_age=604800,  # 7 days
+        )
+        response.set_cookie(
+            key="access_token",
+            value=tokens["access-token"],
+            secure=False,
+            max_age=300,
+        )
+        return response
