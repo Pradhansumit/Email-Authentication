@@ -1,10 +1,8 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap');
-
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: 'Poppins', sans-serif;
+  font-family: 'Roboto', sans-serif;
 }
 
 body {
@@ -64,16 +62,18 @@ body {
   flex-direction: column;
 }
 
-.NotFoundContainer{
-  margin:auto auto;
+.NotFoundContainer {
+  margin: auto auto;
   text-align: center;
 }
-.NotFoundContainer .heading{
+
+.NotFoundContainer .heading {
   font-size: 200px;
   color: #e4e4ff;
 }
-.NotFoundContainer .desc{
-  font-size:30px;
+
+.NotFoundContainer .desc {
+  font-size: 30px;
   font-weight: bold;
-  color:#e4e4ff;
+  color: #e4e4ff;
 }

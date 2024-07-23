@@ -6,6 +6,10 @@ import Home from "./pages/Home";
 import NotFound from "./pages/NotFound";
 import ProtectedRoute from "./components/ProtectedRoute";
 import "./styles/main.css"
+import '@fontsource/roboto/300.css';
+import '@fontsource/roboto/400.css';
+import '@fontsource/roboto/500.css';
+import '@fontsource/roboto/700.css';
 
 function Logout() {
     localStorage.clear();
@@ -28,7 +32,7 @@ function App() {
                     </ProtectedRoute>
                 }
                 />
-                <Route path="/login" element={<Login />} />
+                <Route path="/login" element={<Login setUser={setUser} />} />
                 <Route path="/register" element={<RegisterAndLogout setUser={setUser} />} />
                 <Route path="/logout" element={<Logout />} />
                 <Route path="*" element={<NotFound />} />

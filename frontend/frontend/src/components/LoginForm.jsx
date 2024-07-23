@@ -2,8 +2,9 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ACCESS_TOKEN, REFRESH_TOKEN } from "../constants.js";
 import api from "../api.js";
+import { jwtDecode } from "jwt-decode";
 
-export default function LoginForm({ route }) {
+export default function LoginForm({ route, setUser }) {
     const [username, setUsername] = useState("")
     const [password, setPassword] = useState("")
     // const [loading, setLoading] = useState(false)
@@ -17,7 +18,11 @@ export default function LoginForm({ route }) {
             if (res.status === 200) {
                 navigate("/home")
                 localStorage.setItem(ACCESS_TOKEN, res.data["access-token"]) //to set the token from response to localStorage
-                localStorage.setItem(REFRESH_TOKEN, res.data["refresh-token"]) //to set the token from response to localStoragel     
+                localStorage.setItem(REFRESH_TOKEN, res.data["refresh-token"]) //to set the token from response to localStorage
+
+                const decode = jwtDecode(res.data["refresh-token"])
+                const firstName = decode.first_name
+                setUser(firstName)
             }
         }
         catch (error) {
