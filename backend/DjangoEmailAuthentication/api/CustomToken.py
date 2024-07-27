@@ -1,21 +1,15 @@
-from sys import exception
-from warnings import catch_warnings
-from xmlrpc.client import ResponseError
-import jwt
-import os
-from dotenv import main
-from datetime import timedelta, datetime, timezone
-from api import models
-from rest_framework import status
-from rest_framework_simplejwt.tokens import RefreshToken
+from datetime import datetime, timedelta, timezone
 
-main.load_dotenv()
-secret = os.getenv("secret")
-algorithm = os.getenv("algorithm")
+import jwt
+from api import models
+from DjangoEmailAuthentication import settings
+from rest_framework import status
+
+# GET JWT TOKEN SETTINGS FROM SETTINGS FILE
+secret = settings.JWT_SECRET
+algorithm = settings.JWT_ALGORITHM
 
 # FOR CREATING TOKEN
-
-
 def CreateEmailToken(user: dict) -> str:
     user_dtl = user
     payload = {
@@ -34,31 +28,37 @@ def CreateEmailToken(user: dict) -> str:
     tokenModel.save()
     return token
 
-
 # FOR DECODING TOKEN
-
-
-def GetToken(token):
+def ValidateToken(token):
     try:
         token_rec = jwt.decode(token, secret, algorithm)
         if token_rec:  # for valid token also for checking if the expiry is not over
 
             tk_model = models.TokenModel
-            tk_model_result = tk_model.objects.get(token=token)
+            tk_model_result = tk_model.objects.get(token=token) # check if the token is present in db
 
             tk_user = token_rec["email"]
-            tk_user_verified = models.CustomUser.objects.get(email=tk_user)
+            tk_user_verified = models.CustomUser.objects.get(email=tk_user) # check for user in db
+            
             if tk_model_result.isVerified is not True:
                 if tk_model_result and tk_user_verified:
                     """
-                    for changing status of user
-                    user is active when the token is valid 
-                    both in time and model
+                        for changing status of user
+                        user is active when the token is valid 
+                        both in time and model
                     """
                     tk_model_result.isVerified = True
                     tk_model_result.save() # to set token one time usage
-                    tk_user_verified.is_active = True
-                    tk_user_verified.save()
+                    
+                    
+                    if tk_user_verified.is_active is not True: 
+                        '''
+                        only when a user is activating
+                        the account after registration
+                        '''
+                        tk_user_verified.is_active = True
+                        tk_user_verified.save()
+
                     return True
                 return False
             else:
@@ -104,7 +104,7 @@ def SetTokenAfterLogin(user:dict[str, str]):
     except Exception as ex:
         raise Exception ({f"Error decoding token: {str(ex)}", status.HTTP_403_FORBIDDEN})
 
-# For New Access and Refresh token
+# FOR NEW ACCESS AND REFRESH TOKEN
 def GetNewAccessToken(refresh_token):
     try:
         token_dec = jwt.decode(refresh_token, secret, algorithm)

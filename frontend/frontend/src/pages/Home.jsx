@@ -1,6 +1,6 @@
 import Dashboard from "../components/Dashboard";
 
-function Home({ user }) {
-  return <Dashboard user={user} />
+function Home() {
+  return <Dashboard />;
 }
 export default Home;

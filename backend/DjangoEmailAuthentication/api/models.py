@@ -1,7 +1,6 @@
+from api import backend
 from django.contrib.auth.base_user import AbstractBaseUser
 from django.db import models
-
-from api import backend
 
 
 # CUSTOM USER MODEL
@@ -40,6 +39,6 @@ class CustomUser(AbstractBaseUser):
 
 # TOKEN MODEL
 class TokenModel(models.Model):
-    user = models.EmailField(unique=True)
+    user = models.EmailField()
     token = models.CharField(max_length=200)
     isVerified = models.BooleanField(default=False)

@@ -1,44 +1,52 @@
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import { useState } from "react";
-import Login from "./pages/Login";
-import Register from "./pages/Register";
-import Home from "./pages/Home";
-import NotFound from "./pages/NotFound";
+import "@fontsource/roboto/300.css";
+import "@fontsource/roboto/400.css";
+import "@fontsource/roboto/500.css";
+import "@fontsource/roboto/700.css";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import PasscodeTokenEmail from "./components/PasscodeTokenEmail";
 import ProtectedRoute from "./components/ProtectedRoute";
-import "./styles/main.css"
-import '@fontsource/roboto/300.css';
-import '@fontsource/roboto/400.css';
-import '@fontsource/roboto/500.css';
-import '@fontsource/roboto/700.css';
+import ForgetPasswordEmailForm from "./pages/ForgetPasswordEmailForm";
+import Home from "./pages/Home";
+import Login from "./pages/Login";
+import Message from "./pages/Message";
+import NotFound from "./pages/NotFound";
+import PasswordResetForm from "./pages/PasswordResetForm";
+import Register from "./pages/Register";
+import "./styles/main.css";
 
 function Logout() {
-    localStorage.clear();
-    return <Navigate to="/login" />
+  localStorage.clear();
+  return <Navigate to="/login" />;
 }
 
-function RegisterAndLogout({ setUser }) {
-    localStorage.clear()
-    return <Register setUser={setUser} />
+function RegisterAndLogout() {
+  localStorage.clear();
+  return <Register />;
 }
 
 function App() {
-    const [user, setUser] = useState(null)
-    return (
-        <BrowserRouter>
-            <Routes>
-                <Route path="/home" element={
-                    <ProtectedRoute>
-                        <Home user={user} />
-                    </ProtectedRoute>
-                }
-                />
-                <Route path="/login" element={<Login setUser={setUser} />} />
-                <Route path="/register" element={<RegisterAndLogout setUser={setUser} />} />
-                <Route path="/logout" element={<Logout />} />
-                <Route path="*" element={<NotFound />} />
-            </Routes>
-        </BrowserRouter>
-    )
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <ProtectedRoute>
+              <Home />
+            </ProtectedRoute>
+          }
+        />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<RegisterAndLogout />} />
+        <Route path="/logout" element={<Logout />} />
+        <Route path="*" element={<NotFound />} />
+        <Route path="/message" element={<Message />} />
+        <Route path="/forgot-password" element={<ForgetPasswordEmailForm />} />
+        <Route path="/auth" element={<PasscodeTokenEmail />} />
+        <Route path="/password-reset" element={<PasswordResetForm />} />
+      </Routes>
+    </BrowserRouter>
+  );
 }
 
-export default App
+export default App;
